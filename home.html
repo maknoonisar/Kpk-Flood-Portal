@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title></title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  
+  <link href="assets/css/variables.css" rel="stylesheet">
+
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+
+
+  <style>
+    body {
+  background-image: url('floodbackgiff.gif');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.hero-section {
+  margin-top: 89px;
+  position: relative;
+  background: url('https://via.placeholder.com/1600x900') no-repeat;
+  height: 400px;
+  color: white;
+}
+
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 40px;
+  transform: translateY(-50%);
+}
+
+.hero-button {
+  margin-top: 20px;
+}
+
+.list-ic {
+  padding: 0;
+  margin-top: 20px;
+  width: 100%;
+  background-color: rgb(51, 51, 51);
+}
+
+.list-ic li {
+  list-style-type: none;
+  position: relative;
+}
+
+.list-ic li span {
+  display: inline-block;
+  font-weight: 800;
+  width: 2em;
+  height: 2em;
+  text-align: center;
+  line-height: 2em;
+  border-radius: 1em;
+  background: #18bc9c;
+  color: white;
+  
+}
+
+.list-ic li::before {
+  content: '';
+  position: absolute;
+  background: #18bc9c;
+  z-index: -1;
+}
+
+.list-ic li:first-child::before {
+  display: none;
+}
+
+.list-ic.vertical li span {
+  margin: 1.4em 0;
+}
+
+.image-container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-wrapper img {
+  max-width: 186px;
+  height: 250px;
+  margin-right: 10px; /* Add some space between images */
+  margin-bottom: 10px; /* Add some space between rows */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.overlay img {
+  max-width: 90%;
+  max-height: 90%;
+  border: 5px solid #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 24px;
+}
+
+/* Animation */
+.list-ic.vertical .animated-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.list-ic.vertical .animated-item:nth-child(1) {
+  transition-delay: 0.3s;
+}
+
+.list-ic.vertical .animated-item:nth-child(2) {
+  transition-delay: 0.6s;
+}
+
+.list-ic.vertical .animated-item:nth-child(3) {
+  transition-delay: 0.9s;
+}
+
+.list-ic.vertical .animated-item.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.image-container {
+  width: 4000px; /* Ensure the container spans the entire width */
+  height: 200px; /* Allow the height to adjust automatically based on content */
+}
+
+.image-wrapper img {
+  max-width: 186px; /* Set maximum width to 100% of the container */
+  height: 200px; /* Allow the height to adjust automatically to maintain aspect ratio */
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .overlay img {
+    max-width: 90%;
+    max-height: 90%;
+    border: 5px solid #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+  </style>
+
+</head>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const images = document.querySelectorAll('.image-wrapper img');
+    
+    images.forEach(function(image) {
+      image.addEventListener('click', function() {
+        const overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        
+        const img = document.createElement('img');
+        img.src = this.src;
+        img.alt = this.alt;
+        
+        const closeButton = document.createElement('span');
+        closeButton.classList.add('close-button');
+        closeButton.innerHTML = '&times;';
+        closeButton.addEventListener('click', function() {
+          document.body.removeChild(overlay);
+        });
+        
+        overlay.appendChild(img);
+        overlay.appendChild(closeButton);
+        document.body.appendChild(overlay);
+      });
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+  var animatedItems = document.querySelectorAll('.list-ic.vertical .animated-item');
+
+  function animateItems() {
+    animatedItems.forEach(function(item, index) {
+      setTimeout(function() {
+        item.classList.add('show');
+      }, index * 300); // Adjust the delay as needed
+    });
+  }
+
+  animateItems();
+});
+  </script>
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top" style="background-color: #318a9e; padding: 0px 0 !important;">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center scrollto me-auto me-lg-0">
+        <img src="ndma_logo.png" alt="Logo" width="60" height="70">
+      </a>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <span style="color: #fff; padding-right: 490px; font-size: 45px;"><b>KP FLOOD SYNDICATE</b></span>
+          <li><a class="nav-link scrollto" href="about.html" style="color: #fff;">About</a></li>
+          <li><a class="nav-link scrollto" href="home.html" style="color: #fff;">Home</a></li>
+          <li><a class="nav-link scrollto" href="study.html" style="color: #fff;">Study</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle d-none"></i>
+      </nav>
+    </div>
+  </header>
+
+  
+
+
+  <div class="container" style="padding-top: 30px;">
+    <div class="row">
+      <!-- Hero Section -->
+      <section class="hero-section col-md-6">
+        <div class="hero-content">
+          <h1>KP Flood Syndicate</h1>
+          <p>Enhancing early warning, improve infrastructure resilience, and ensure rapid response to minimize impact.</p>
+        </div>
+        <div class="hero-video">
+          <video autoplay loop muted playsinline>
+            <source src="portal_video2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </section>
+  
+      <!-- List Section -->
+      <ul class="list-ic vertical col-md-6">
+        <li class="animated-item">
+          <span>1</span>
+          <a href="#" style="color: white; font-size: larger;">Detailed analysis of past flood trends and anomalies has been conducted to understand the patterns and identify deviations in KP</a>
+        </li>
+        <li class="animated-item">
+          <span>2</span>
+          <a href="#" style="color: white; font-size: larger;">Zonation and projection efforts have provided crucial insights into susceptible regions</a>
+        </li>
+        <li class="animated-item">
+          <span>3</span>
+          <a href="#" style="color: white; font-size: larger;">Using various advanced techniques, identified susceptible areas</a>
+        </li>
+      </ul>
+    </div>
+  
+    <!-- Image Section -->
+    <div class="row">
+      <div class="image-container">
+        <div class="image-wrapper">
+          <img src="Dams.jpg" alt="Map 1">
+          <img src="Distance from rivers.jpg" alt="Map 2">
+          <img src="Drainage Density.jpg" alt="Map 3">
+          <img src="JPGs/Elevation.jpg" alt="Map 1">
+          <img src="JPGs/Flood Categorization.jpg" alt="Map 1">
+          <img src="JPGs/FLOOD SUS SCORES.jpg" alt="Map 2">
+          <img src="JPGs/Geology.jpg" alt="Map 1">
+          <img src="JPGs/Dams.jpg" alt="Map 1">
+          <img src="JPGs/NDVI.jpg" alt="Map 1">
+          <img src="JPGs/MHVRA.jpg" alt="Map 2">
+          <img src="JPGs/LULC.jpg" alt="Map 3">
+          <img src="JPGs/HISTORICAL FLOODS FINAL.jpg" alt="Map 1">
+          <img src="JPGs/GLOF.jpg" alt="Map 2">
+          <img src="kpk.png" alt="Map 3">
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+ 
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="bootStrap_CSS.css" rel="stylesheet">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <!-- Linking the Geojson-->
+    <script src="KPKRAINdatageojson.geojson"></script>
+     <script src="KPKNDVIgeo.geojson"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  </head>
+
+  <body>
+    <div id="top-div">
+      <div id="hello-text">KPK FLOODS</div>
+      <div id="ndma-logo">
+        <img src="NDMA_Pakistan_Logo.jpg" alt="NDMA Logo" />
+      </div>
+    </div>
+
+    <div id="map">
+      <div class="map-overlay-info" id="features" style="display: none;">
+        <h2>Temporal Precipitation Analysis of KPK</h2>
+        <div id="pd"><p>Hover over a district to show temporal trend</p></div>
+        <canvas id="myChart" width="250" height="100"></canvas>
+    </div>
+    <div class="map-overlay-info" id="ndvi-features" style="display: none;">
+      <h2>Temporal analysis of NDVI for KPK</h2>
+      <div id="ndvi-pd"><p>Hover over a district to see NDVI temporal trends</p></div>
+      <canvas id="ndvi-myChart" width="250" height="100"></canvas>
+  </div>
+    </div>
+    <div class="map-overlay">
+      <div class="map-overlay-inner">
+        <!-- BOUNDARIES -->
+        <button id="boundariesButton">BOUNDARIES</button>
+
+        <div id="boundaryButtons" style="display: none">
+          <button class="accordion" data-target="section0" id="nationalButton">
+            <input type="checkbox" id="nationalCheckbox" />
+            <span> NATIONAL BOUNDARY</span>
+          </button>
+          <div class="panel" id="section0">
+            <p>
+              <img
+                src="legends/national.png"
+                alt="National Boundary Image"
+                width="50"
+                height="50"
+              />
+            </p>
+          </div>
+
+          <button
+            class="accordion"
+            data-target="section1"
+            id="provincialButton"
+          >
+            <input type="checkbox" id="provincialCheckbox" />
+            <span> PROVINCIAL BOUNDARY</span>
+          </button>
+          <div class="panel" id="section1">
+            <p>
+              <img
+                src="legends/provincial.png"
+                alt="National Boundary Image"
+                width="50"
+                height="50"
+              />
+            </p>
+          </div>
+          <button class="accordion" data-target="section2" id="districtButton">
+            <input type="checkbox" id="districtCheckbox" />
+            <span>DISTRICT BOUNDARY</span>
+          </button>
+          <div class="panel" id="section2">
+            <p>
+              <img
+                src="legends/district.png"
+                alt="National Boundary Image"
+                width="50"
+                height="50"
+              />
+            </p>
+          </div>
+
+          <button class="accordion" data-target="section3" id="tehsilButton">
+            <input type="checkbox" id="tehsilCheckbox" />
+            <span>TEHSIL BOUNDARY</span>
+          </button>
+          <div class="panel" id="section3">
+            <p>
+              <img
+                src="legends/tehsil.png"
+                alt="National Boundary Image"
+                width="50"
+                height="50"
+              />
+            </p>
+          </div>
+        </div>
+        <button id="GLOBALButton">Global Flood Archives</button>
+
+        <div id="GLOBALButtonButtons" style="display: none">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="dyn_flood">
+            <label class="form-check-label" for="dyn_flood" >Dynamic Surface Water Extent</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flood2d">
+            <label class="form-check-label" for="flood2d" >Flood (2-Day Window)</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flood3d">
+            <label class="form-check-label" for="flood3d">Flood (3-Day Window)</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="floodsumm13l">
+            <label class="form-check-label" for="floodsumm13l">Flood summary for days 1-3</label>
+          </div>
+      </div>
+
+      <button id="LocalButton">Local Layers</button>
+<div id="LocalButtonButtons" style="display: none">
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="kpsoil">
+    <label class="form-check-label" for="kpsoil">KP Soil Classification</label>
+  </div>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="kpgeology">
+    <label class="form-check-label" for="kpgeology">KP Geology</label>
+  </div>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="kplulc">
+    <label class="form-check-label" for="kplulc">KP LULC</label>
+  </div>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="kpslope">
+    <label class="form-check-label" for="kpslope">KP Slope</label>
+  </div>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="distriver">
+    <label class="form-check-label" for="distriver">Distance From River in kilometers</label>
+  </div>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="kpdrainage">
+    <label class="form-check-label" for="kpdrainage">KP Drainage Density</label>
+  </div>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="kptpi">
+    <label class="form-check-label" for="kptpi">Topographic Position Index KP</label>
+  </div>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="kpndvigeo">
+    <label class="form-check-label" for="kpndvigeo">KP 2023 NDVI (averaged) </label>
+  </div>  
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="kppreci">
+    <label class="form-check-label" for="kppreci">KP 2010 Precipitation </label>
+  </div> 
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="kppreci2">
+    <label class="form-check-label" for="kppreci">KP 2015 Precipitation </label>
+  </div> 
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="kppreci3">
+    <label class="form-check-label" for="kppreci">KP 2020 Precipitation </label>
+  </div> 
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="kppreci4">
+    <label class="form-check-label" for="kppreci">KP 2023 Precipitation </label>
+  </div>  
+  <div id="slider-container">
+    <input type="range" min="2010" max="2023" step="5" value="2010" class="slider" id="year-slider">
+    <div class="year-labels">
+      <span class="year-label">2010</span>
+      <span class="year-label">2015</span>
+      <span class="year-label">2020</span>
+      <span class="year-label">2023</span>
+  </div>
+  <p style="color: white;">Yearly Averaged Precipitation in mm/year</p>
+  <button id="play-button" title="Click to start slider"><i class="fas fa-play"></i></button>
+  <button id="remove-button" title="Click to remove the layers of slider" style="background-color: blue; color: white; border: none; border-radius: 3px; padding: 5px 10px; margin-left: 10px;">
+    <i class="fas fa-times"></i>
+</button>
+</div>
+  <!-- New button for Historic Flood Events KPK -->
+  <button id="HistoricFloodButton" class="sub-button">Historic Flood Events KPK</button>
+  <div id="HistoricFloodButtonButtons" style="display: none">
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="27july2010">
+      <label class="form-check-label" for="27july2010">27th July 2010</label>
+    </div>
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="23rdAugust2012">
+      <label class="form-check-label" for="23rdAugust2012">23rd August 2012</label>
+    </div>
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="16thSeptember2012">
+      <label class="form-check-label" for="16thSeptember2012">16th September 2012</label>
+    </div>
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="1stAugust2013">
+      <label class="form-check-label" for="1stAugust2013">1st August 2013</label>
+    </div>
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="7thAugust2013">
+      <label class="form-check-label" for="7thAugust2013">7th August 2013</label>
+    </div>
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="1stSeptember2014">
+      <label class="form-check-label" for="1stSeptember2014">1st September 2014</label>
+    </div>
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="15thJuly2015">
+      <label class="form-check-label" for="15thJuly2015">15th July 2015</label>
+    </div>
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="12thMarch2016">
+      <label class="form-check-label" for="12thMarch2016">12th March 2016</label>
+    </div>
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="3rdJuly2018">
+      <label class="form-check-label" for="3rd July 2018">3rd July 2018</label>
+    </div>
+  </div>
+</div>
+
+
+
+        <button id="extentsButton">EXTENTS</button>
+
+        <div id="extentsButtonButtons" style="display: none">
+          
+          <button class="accordion" data-target="section10" id="ext_22">
+            <input type="checkbox" id="ext_22Checkbox" />
+            <span> FLOOD EXTENT-2022</span>
+          </button>
+          <div class="panel" id="section10">
+            <p>
+              <img
+                src="legends/BLUE.png"
+                alt="National Boundary Image"
+                width="60"
+                height="30"
+              />
+            </p>
+          </div>
+
+        
+          <button class="accordion" data-target="section11" id="ext_23">
+            <input type="checkbox" id="ext_23Checkbox" />
+            <span> FLOOD EXTENT-2023</span>
+          </button>
+          <div class="panel" id="section11">
+            <p>
+              <img
+                src="legends/PURPLE.png"
+                alt="National Boundary Image"
+                width="60"
+                height="30"
+              />
+            </p>
+          </div>
+
+          <button class="accordion" data-target="section12" id="ext_24">
+            <input type="checkbox" id="ext_24Checkbox" />
+            <span>  FLOOD EXTENT FOR-2024</span>
+          </button>
+          <div class="panel" id="section12">
+            <p>
+              <img
+                src="legends/BLUE - Copy.png"
+                alt="National Boundary Image"
+                width="60"
+                height="30"
+              />
+            </p>
+          </div>
+
+          <button class="accordion" data-target="section19" id="htspts">
+            <input type="checkbox" id="htsptsCheckbox" />
+            <span> HOTSPOT AREAS</span>
+          </button>
+
+          <div class="panel" id="section19">
+            <p>
+              <img
+                src="legends/hotspots.png"
+                alt="National Boundary Image"
+                width="90"
+                height="60"
+              />
+            </p>
+          </div>
+      </div>
+
+
+      <button id="impButton">IMPACTS</button>
+
+      <div id="impButtonButtons" style="display: none">
+        <!--
+         <button class="accordion" data-target="section120" id="road_net">
+          <input type="checkbox" id="road_netCheckbox" />
+          <span> Roads Network</span>
+        </button>
+        -->
+        <button class="accordion" data-target="section120" id="road_net">
+          <input type="checkbox" id="road_netCheckbox" />
+          <span> Roads Network</span>
+        </button>
+        <button class="accordion" data-target="section120" id="thsls">
+          <input type="checkbox" id="thslsCheckbox" />
+          <span> Dams</span>
+        </button>
+
+
+        <button class="accordion" data-target="section12" id="hosp">
+          <input type="checkbox" id="hospCheckbox" />
+          <span> HOSPITALS</span>
+        </button>
+        <div class="panel" id="section12">
+          <p>
+            <img
+              src="legends/pinkCir.png"
+              alt="National Boundary Image"
+              width="60"
+              height="30"
+            />
+          </p>
+        </div>
+
+
+      
+        <button class="accordion" data-target="section13" id="schl">
+          <input type="checkbox" id="schlCheckbox" />
+          <span> SCHOOLS</span>
+        </button>
+        <div class="panel" id="section13">
+          <p>
+            <img
+              src="legends/cyanCir.png"
+              alt="National Boundary Image"
+              width="60"
+              height="30"
+            />
+          </p>
+        </div>
+
+
+
+
+        <button class="accordion" data-target="section14" id="sett">
+          <input type="checkbox" id="settCheckbox" />
+          <span> SETTLEMENTS</span>
+        </button>
+        <div class="panel" id="section14">
+          <p>
+            <img
+              src="legends/green.png"
+              alt="National Boundary Image"
+              width="60"
+              height="30"
+            />
+          </p>
+        </div>
+
+
+        <button class="accordion" data-target="section15" id="arprts">
+          <input type="checkbox" id="arprtsCheckbox" />
+          <span> AIRPORTS</span>
+        </button>
+        <div class="panel" id="section15">
+          <p>
+            <img
+              src="legends/whiteCir.png"
+              alt="National Boundary Image"
+              width="60"
+              height="30"
+            />
+          </p>
+        </div>
+    </div>
+
+
+    </div>
+    <script src="https://cdn.maptiler.com/maptiler-sdk-js/v1.2.0/maptiler-sdk.umd.min.js"></script>
+    <link
+      href="https://cdn.maptiler.com/maptiler-sdk-js/v1.2.0/maptiler-sdk.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.maptiler.com/maptiler-sdk-js/v1.2.0/maptiler-sdk.umd.js"></script>
+    <script src="https://cdn.maptiler.com/leaflet-maptilersdk/v2.0.0/leaflet-maptilersdk.js"></script>
+    <script src="https://cdn.maptiler.com/maptiler-weather/v1.1.0/maptiler-weather.umd.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
