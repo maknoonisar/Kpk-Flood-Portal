@@ -1,6 +1,1 @@
-Thanks for downloading this template!
-
-Template Name: HeroBiz
-Template URL: https://bootstrapmade.com/herobiz-bootstrap-business-template/
-Author: BootstrapMade.com
-License: https://bootstrapmade.com/license/
+Developed a data-driven portal for KPK Flood Syndicate, integrating 30 years of discharge, precipitation, and temperature records from gauging and meteorological stations. Processed, cleaned, and converted datasets, including hydraulic structures, rivers, settlements, population density, schools, hospitals, road networks, agriculture, and livestock, into GIS-compatible formats (Excel/ESRI Shapefiles). Enabled HEC-RAS flood modeling and comprehensive impact assessment through organized spatial datasets and metadata for effective monsoon 2024 preparedness.
